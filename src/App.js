@@ -1,7 +1,23 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client';
 import './App.css';
 
 class CalculatorOutput extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
+  componentDidMount() {
+    this.setState({socket: this.props.socket}) &&
+    this.state.socket.emit('get-all', '0') &&
+    this.state.socket.on('give-all', function(res) {
+      alert('message received');
+      console.log('message received');
+    });
+  }
+
   render() {
     return(
       <div className="Calc-Out">
@@ -14,11 +30,24 @@ class CalculatorOutput extends Component {
 class LocalCalculator extends Component {
   constructor(props) {
     super(props);
-    this.buttonPressHandler = this.buttonPressHandler.bind(this);
+
+    this.submitButtonHandler = this.submitButtonHandler.bind(this);
   }
 
-  buttonPressHandler(e) {
+  submitButtonHandler(e) {
+    this.state.socket.emit('get-all', '3 + 3');
+  }
 
+  componentWillMount() {
+    this.setState({
+      socket: io.connect('localhost:3001'),
+    });
+  }
+
+  componentDidMount() {
+    this.state.socket.on('give-all', function(res) {
+      console.log(res);
+    });
   }
 
   render() {
@@ -28,8 +57,10 @@ class LocalCalculator extends Component {
         <br />
         <div className="Calc-In">
           <div className="Input-Window">Test</div>
-          <div className="Submit-Button" onClick={this.buttonPressHandler}>Submit</div>
+          <div className="Submit-Button" onClick={this.submitButtonHandler}>Submit</div>
         </div>
+        <br /><br />
+        <CalculatorOutput socket={this.state.socket}/>
       </div>
     );
   }
@@ -57,8 +88,6 @@ class App extends Component {
         <Header />
         <br />
         <LocalCalculator />
-        <br /><br />
-        <CalculatorOutput />
       </div>
     );
   }
