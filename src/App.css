@@ -1,0 +1,66 @@
+.App {
+  text-align: center;
+}
+
+.Calc-In {
+  align-items: center;
+  display: flex;
+  margin: auto;
+  padding: 0px;
+  table-layout: auto;
+  width: 75%;
+  overflow: hidden;
+}
+
+.Calc-Out {
+  margin: auto;
+  width: 75%;
+
+  outline: 1px;
+  outline-color: #333;
+  outline-style: solid;
+
+}
+
+.Header-Box {
+  background-color: #333;
+  padding: 20px;
+  color: white;
+}
+
+.Input-Window {
+  display: inline-block;
+  float: left;
+  font-size: large;
+  height: 15px;
+  padding: 5px;
+  width: 70%;
+}
+
+.Instructions {
+  font-size: small;
+}
+
+.Me-Intro {
+  font-size: small;
+}
+
+.Submit-Button {
+  background-color: #333;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  float: right;
+  height: 20px;
+  padding: 15px 0px;
+  width: 25%;
+}
+
+.Submit-Button:hover {
+  background-color: #444;
+}
+
+.Submit-Button:active {
+  background-color: #444;
+  transform: scale(.95);
+}
