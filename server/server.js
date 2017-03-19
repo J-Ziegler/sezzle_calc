@@ -21,11 +21,13 @@ io.on('connection', function(socket){
       io.emit('update', tools.addCalc(exp, result));
     }
   });
+
   socket.on('get all', function(x) {
     socket.emit('return all', tools.getCalculations());
   });
+
   socket.on('disconnect', function() {
-    console.log('user disconnected');
+    console.log('User Disconnected');
   });
 });
 

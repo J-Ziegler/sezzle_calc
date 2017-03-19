@@ -18,7 +18,7 @@
 
 .Error-Box {
   display: inline-block;
-  background-color: #DD143C;
+  background-color: #FF143C;
   border-radius: 20px;
   padding: 10px;
   width: 55%;
@@ -31,8 +31,8 @@
 
 .Header-Box {
   background-color: #333;
-  padding: 20px;
   color: white;
+  padding: 20px;
 }
 
 .Input-Window {

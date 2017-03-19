@@ -50,7 +50,7 @@ class CalculatorOutput extends Component {
     return(
       <div className="Calc-Out">
         {this.state.results.map((result) =>
-            <Calculation key={result.key} value={result}/>
+          <Calculation key={result.key} value={result}/>
         )}
       </div>
     );
@@ -62,9 +62,9 @@ class LocalCalculator extends Component {
     super(props);
 
     this.state = {
-        socket: io.connect('localhost:3001'),
-        equation: '',
-        invalidEntry: true,
+      socket: io.connect('localhost:3001'),
+      equation: '',
+      invalidEntry: true,
     };
 
     this.submitButtonHandler = this.submitButtonHandler.bind(this);
