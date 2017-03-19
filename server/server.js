@@ -1,7 +1,6 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var math = require('math-expression-evaluator');
 var tools = require('./messages.js');
 
 // var messages = [];
@@ -13,15 +12,20 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
   console.log('a user connected');
 
-  socket.on('equation', function(eq) {
-    console.log('client submitted: ' + eq)
+  socket.on('equation', function(exp) {
+    console.log('client submitted: ' + exp);
+    var result = tools.evaluate(exp);
+    if (result === 'err') {
+      socket.emit('invalid expression', exp);
+    } else {
+      io.emit('update', tools.addCalc(exp, result));
+    }
+  });
+  socket.on('get all', function(x) {
+    socket.emit('return all', tools.getCalculations());
   });
   socket.on('disconnect', function() {
     console.log('user disconnected');
-  });
-  socket.on('get-all', function(x) {
-    console.log('client requested all');
-    io.emit('give-all', tools.addCalc(math.eval(x)));
   });
 });
 
