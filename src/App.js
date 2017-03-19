@@ -2,26 +2,56 @@ import React, { Component } from 'react';
 import io from 'socket.io-client';
 import './App.css';
 
+class Calculation extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      expression: this.props.value.expression,
+      result: this.props.value.result,
+    }
+  }
+
+  render() {
+    return(
+      <div className="Equation">{this.state.expression} = {this.state.result}</div>
+    );
+  }
+}
+
 class CalculatorOutput extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      results: [],
+      socket: this.props.socket,
+    };
+
+    this.state.socket.emit('get all', 0);
+    this.updateResults = this.updateResults.bind(this);
   }
 
   componentDidMount() {
-    this.setState({socket: this.props.socket}) &&
-    this.state.socket.emit('get-all', '0') &&
-    this.state.socket.on('give-all', function(res) {
-      alert('message received');
-      console.log('message received');
+    this.state.socket.on('update', (res) => {
+      this.updateResults(res);
     });
+    this.state.socket.on('return all', (res) => {
+      this.updateResults(res);
+    });
+  }
+
+  updateResults(res) {
+    this.setState({results: res});
+    console.log('Results updated');
   }
 
   render() {
     return(
       <div className="Calc-Out">
-        Shared Calculator Output
+        {this.state.results.map((result) =>
+            <Calculation key={result.key} value={result}/>
+        )}
       </div>
     );
   }
@@ -31,32 +61,44 @@ class LocalCalculator extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+        socket: io.connect('localhost:3001'),
+        equation: '',
+        invalidEntry: true,
+    };
+
     this.submitButtonHandler = this.submitButtonHandler.bind(this);
-  }
-
-  submitButtonHandler(e) {
-    this.state.socket.emit('get-all', '3 + 3');
-  }
-
-  componentWillMount() {
-    this.setState({
-      socket: io.connect('localhost:3001'),
-    });
+    this.inputChanged = this.inputChanged.bind(this);
   }
 
   componentDidMount() {
-    this.state.socket.on('give-all', function(res) {
-      console.log(res);
-    });
+    this.state.socket.on('invalid expression', (res) => {
+      this.setState({
+        equation: res,
+        invalidEntry: false,
+      });
+    })
+  }
+
+  submitButtonHandler(e) {
+    if (this.state.equation !== '') {
+      this.state.socket.emit('equation', this.state.equation);
+      this.setState({equation: '', invalidEntry: false});
+    }
+  }
+
+  inputChanged(e) {
+    this.setState({equation: e.target.value});
   }
 
   render() {
     return(
       <div>
-        <div className="Instructions">You may use +, -, *, / operators. Spaces and unknown symbols (including parens) are ignored.</div>
-        <br />
+        <p className="Instructions">Enter an expression into the box below.</p>
+        {this.state.invalidEntry ? <div className="Error-Box">The entry you submitted in an invalid mathematical expression. Please try again.</div> : null}
+        <br /><br />
         <div className="Calc-In">
-          <div className="Input-Window">Test</div>
+          <input className="Input-Window" type="text" value={this.state.equation} onChange={this.inputChanged}></input>
           <div className="Submit-Button" onClick={this.submitButtonHandler}>Submit</div>
         </div>
         <br /><br />

@@ -7,19 +7,26 @@
   display: flex;
   margin: auto;
   padding: 0px;
-  table-layout: auto;
   width: 75%;
   overflow: hidden;
 }
 
 .Calc-Out {
   margin: auto;
-  width: 75%;
+  width: 50%;
+}
 
-  outline: 1px;
-  outline-color: #333;
-  outline-style: solid;
+.Error-Box {
+  display: inline-block;
+  background-color: #DD143C;
+  border-radius: 20px;
+  padding: 10px;
+  width: 55%;
+}
 
+.Equation {
+  font-size: large;
+  padding: 10px;
 }
 
 .Header-Box {
@@ -42,7 +49,7 @@
 }
 
 .Me-Intro {
-  font-size: small;
+  font-size: medium;
 }
 
 .Submit-Button {
