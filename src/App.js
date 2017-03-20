@@ -62,9 +62,9 @@ class LocalCalculator extends Component {
     super(props);
 
     this.state = {
-      socket: io.connect('localhost:3001'),
+      socket: io.connect('ss1.jziegler.xyz:3001'),
       equation: '',
-      invalidEntry: true,
+      invalidEntry: false,
     };
 
     this.submitButtonHandler = this.submitButtonHandler.bind(this);
@@ -75,7 +75,7 @@ class LocalCalculator extends Component {
     this.state.socket.on('invalid expression', (res) => {
       this.setState({
         equation: res,
-        invalidEntry: false,
+        invalidEntry: true,
       });
     })
   }
